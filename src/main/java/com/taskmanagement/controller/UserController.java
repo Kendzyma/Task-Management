@@ -1,4 +1,5 @@
 package com.taskmanagement.controller;
+
 import com.taskmanagement.dto.ApiResponse;
 import com.taskmanagement.dto.PaginatedResponse;
 import com.taskmanagement.dto.UserDto;
@@ -8,7 +9,6 @@ import com.taskmanagement.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +68,7 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Search user by na,e",
+            summary = "Search user by name",
             description = "Search user by name")
     @GetMapping("/search")
     public ApiResponse<PaginatedResponse<User>> getUserTasks(@RequestParam("name") String name,

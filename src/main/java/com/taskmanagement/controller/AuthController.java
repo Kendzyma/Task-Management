@@ -25,11 +25,18 @@ public class AuthController {
     }
 
 
+    @Operation(
+            summary = "Create Pin",
+            description = "Create Pin")
     @PostMapping("/create-pin")
     public ApiResponse<String> createPin(@Valid @RequestBody PinRequest pinCreationRequest) {
          authService.createPin(pinCreationRequest);
         return ApiResponse.ok("Pin created");
     }
+
+    @Operation(
+            summary = "Validate Pin",
+            description = "Validate Pin")
 
     @PostMapping("/validate-pin")
     public ApiResponse<String> validatePin(@Valid @RequestBody PinRequest validatePinRequest) {

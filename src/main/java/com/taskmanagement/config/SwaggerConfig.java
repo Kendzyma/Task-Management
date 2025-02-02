@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
                 title = "Task Management API",
                 version = "1.0",
                 description = "Task related activities.",
-                contact = @Contact(name = "Tiamiyu Kehinde", url = "nam", email = "TiamiyuKehinde5@gmail.com")))
+                contact = @Contact(name = "Tiamiyu Kehinde", url = "https://task-management-dyjs.onrender.com/swagger-ui/index.html", email = "TiamiyuKehinde5@gmail.com")))
 @Configuration
 public class SwaggerConfig {
         @Bean

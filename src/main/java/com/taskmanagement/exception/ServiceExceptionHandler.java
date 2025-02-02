@@ -7,6 +7,7 @@ import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,7 +33,20 @@ public class ServiceExceptionHandler {
   public ApiResponse<?> handleResourceNotFoundException(ResourceNotFoundException e) {
     return ApiResponse.notFound(null, e.getMessage());
   }
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<String> handleJsonParseError(HttpMessageNotReadableException ex) {
+    log.error("HttpMessageNotReadableException: {}", ex.getMessage());
 
+    Throwable cause = ex.getCause();
+
+    if (cause instanceof InvalidFormatException invalidFormatException) {
+      if (Objects.equals(invalidFormatException.getTargetType(), java.time.LocalDate.class)) {
+        return ResponseEntity.badRequest().body("Invalid date format. Expected format: dd-MM-yyyy");
+      }
+    }
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Malformed JSON request");
+  }
   @ExceptionHandler(ValidationException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ResponseBody
@@ -122,14 +137,6 @@ public class ServiceExceptionHandler {
   public ApiResponse<?> handleUnrecognizedPropertyException(UnrecognizedPropertyException e) {
     log.error("UnrecognizedPropertyException while parsing JSON object: {}", e.getMessage());
     return ApiResponse.badRequest(null, e.getMessage());
-  }
-
-  @ExceptionHandler(HttpMessageNotReadableException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ResponseBody
-  public ApiResponse<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-    log.error("HttpMessageNotReadableException: {}", e.getMessage());
-    return ApiResponse.badRequest(null, "Bad request");
   }
 
   @ExceptionHandler(BadRequestException.class)
