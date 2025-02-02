@@ -34,18 +34,18 @@ public class ServiceExceptionHandler {
     return ApiResponse.notFound(null, e.getMessage());
   }
   @ExceptionHandler(HttpMessageNotReadableException.class)
-  public ResponseEntity<String> handleJsonParseError(HttpMessageNotReadableException ex) {
+  public ApiResponse<?> handleJsonParseError(HttpMessageNotReadableException ex) {
     log.error("HttpMessageNotReadableException: {}", ex.getMessage());
 
     Throwable cause = ex.getCause();
 
     if (cause instanceof InvalidFormatException invalidFormatException) {
       if (Objects.equals(invalidFormatException.getTargetType(), java.time.LocalDate.class)) {
-        return ResponseEntity.badRequest().body("Invalid date format. Expected format: dd-MM-yyyy");
+       return ApiResponse.badRequest(null,"Invalid date format. Expected format: dd-MM-yyyy");
       }
     }
 
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Malformed JSON request");
+    return ApiResponse.badRequest(null, "Malformed JSON request");
   }
   @ExceptionHandler(ValidationException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
