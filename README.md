@@ -33,7 +33,7 @@ Before running the service, ensure you have:
 ```sh
 git clone https://github.com/Kendzyma/Task-Management.git
 cd TaskManagement
-docker build -t task-management-service .
+docker build -t task-management .
 docker compose up -d
 ```
 ----
