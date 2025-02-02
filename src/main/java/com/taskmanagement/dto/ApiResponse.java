@@ -26,7 +26,14 @@ public class ApiResponse<T> {
         response.body = body;
         return response;
     }
-
+    public static <T> ApiResponse<T> created(T body) {
+        ApiResponse<T> response = new ApiResponse<T>();
+        response.code = 201;
+        response.success = true;
+        response.message = "Success";
+        response.body = body;
+        return response;
+    }
     public static <T> ApiResponse<T> badRequest(T body, String message) {
         ApiResponse<T> response = new ApiResponse<T>();
         response.code = 400;

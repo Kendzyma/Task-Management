@@ -27,8 +27,8 @@ public class UserController {
             summary = "Create a new user",
             description = "Create a new user")
     @PostMapping()
-    public ResponseEntity<UserDto> create(@RequestBody @Valid UserRequest userRequest) {
-        return ResponseEntity.ok(userService.create(userRequest));
+    public ApiResponse<UserDto> create(@RequestBody @Valid UserRequest userRequest) {
+        return ApiResponse.ok(userService.create(userRequest));
     }
 
     @Operation(
@@ -36,25 +36,24 @@ public class UserController {
             description = "Update a user")
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public ResponseEntity<UserDto> update(@RequestBody @Valid UserRequest userRequest, @PathVariable("id") Long id) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userService.update(userRequest,id));
+    public ApiResponse<UserDto> update(@RequestBody @Valid UserRequest userRequest, @PathVariable("id") Long id) {
+        return ApiResponse.created(userService.update(userRequest, id));
     }
 
     @Operation(
             summary = "Get a user",
             description = "Get a user")
     @GetMapping("{id}")
-    public ResponseEntity<User> getById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(userService.getUser(id));
+    public ApiResponse<User> getById(@PathVariable("id") Long id) {
+        return ApiResponse.ok(userService.getUser(id));
     }
 
     @Operation(
             summary = "Get all users",
             description = "Get all users")
     @GetMapping("")
-    public ResponseEntity<List<UserDto>> getAllUsers(Pageable pageable) {
-        return ResponseEntity.ok(userService.getAllUsers(pageable));
+    public ApiResponse<List<UserDto>> getAllUsers(Pageable pageable) {
+        return ApiResponse.ok(userService.getAllUsers(pageable));
     }
 
     @Operation(
