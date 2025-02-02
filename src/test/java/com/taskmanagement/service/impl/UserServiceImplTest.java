@@ -86,7 +86,7 @@ class UserServiceImplTest {
         identity.setUser(user);
         identity.setPassword("encodedPassword");
 
-        userDto = new UserDto(1L, "john.doe@example.com", "+12345678901","John" , "Doe");
+        userDto = new UserDto(1L, "john.doe@example.com", "+12345678901","John" , "Doe",LocalDate.now());
     }
 
     @Test
