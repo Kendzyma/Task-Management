@@ -2,6 +2,7 @@ package com.taskmanagement.service.impl;
 
 import com.taskmanagement.dto.PaginatedResponse;
 import com.taskmanagement.dto.TaskCreationRequest;
+import com.taskmanagement.exception.BadRequestException;
 import com.taskmanagement.model.Task;
 import com.taskmanagement.model.User;
 import com.taskmanagement.repository.TaskRepository;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,9 @@ public class TaskServiceImpl implements TaskService {
         User user = userRepository.findById(taskCreationRequest.userId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        if(taskCreationRequest.dueDate().isBefore(LocalDate.now())){
+            throw new BadRequestException("Due date cannot be in the past");
+        }
         Task task = Task.builder()
                 .title(taskCreationRequest.title())
                 .description(taskCreationRequest.description())
